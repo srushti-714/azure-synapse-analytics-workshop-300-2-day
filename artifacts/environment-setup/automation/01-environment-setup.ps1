@@ -13,7 +13,7 @@ if($IsCloudLabs){
         $userName = $AzureUserName                # READ FROM FILE
         $password = $AzurePassword                # READ FROM FILE
         $clientId = $TokenGeneratorClientId       # READ FROM FILE
-        #$global:sqlPassword = $AzureSQLPassword          # READ FROM FILE
+        $global:sqlPassword = $AzureSQLPassword          # READ FROM FILE
 
         $securePassword = $password | ConvertTo-SecureString -AsPlainText -Force
         $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $userName, $SecurePassword
