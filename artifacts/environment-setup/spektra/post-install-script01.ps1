@@ -156,8 +156,8 @@ git clone https://github.com/solliancenet/azure-synapse-analytics-workshop-400.g
 
 cd './synapse-ws-L300/artifacts/environment-setup/automation'
 
-./01-environment-setup.ps1
-./03-environment-validation.ps1
+#./01-environment-setup.ps1
+#./03-environment-validation.ps1
 
 sleep 20
 Stop-Transcript
