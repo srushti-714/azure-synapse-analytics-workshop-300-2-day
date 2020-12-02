@@ -119,7 +119,8 @@ Set-SynapseRole -WorkspaceName $workspaceName -RoleId "7af0c69a-a548-47d6-aea3-d
 Set-SynapseRole -WorkspaceName $workspaceName -RoleId "c3a6d2f1-a26f-4810-9b0f-591308d5cbf1" -PrincipalId $user.id  # Apache Spark Admin
 
 #Set the Azure AD Admin - otherwise it will bail later
-Set-SqlAdministrator -SubscriptionId $subscriptionId -ResourceGroupName $resourceGroupName -WorkspaceName $workspaceName -TenantId $tenantId -UserName $username -Sid $user.id
+#Set-SqlAdministrator -SubscriptionId $subscriptionId -ResourceGroupName $resourceGroupName -WorkspaceName $workspaceName -TenantId $tenantId -UserName $username -Sid $user.id
+Set-SqlAdministrator $username $user.id;
 
 #add the permission to the datalake to workspace
 $id = (Get-AzADServicePrincipal -DisplayName $workspacename).id
