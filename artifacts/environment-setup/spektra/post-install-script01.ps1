@@ -39,7 +39,33 @@ function EnableIEFileDownload
   Set-ItemProperty -Path $HKLM -Name "1604" -Value 0 -ErrorAction SilentlyContinue -Verbose
   Set-ItemProperty -Path $HKCU -Name "1604" -Value 0 -ErrorAction SilentlyContinue -Verbose
 }
+#Disable PopUp for network configuration
+Function DisableServerMgrNetworkPopup
+    {
+        cd HKLM:\
+        New-Item -Path HKLM:\System\CurrentControlSet\Control\Network -Name NewNetworkWindowOff -Force 
 
+		Get-ScheduledTask -TaskName ServerManager | Disable-ScheduledTask -Verbose
+    }
+ 
+ #Install edge browser
+ Function InstallEdgeChromium
+    {
+        #Download and Install edge
+        $WebClient = New-Object System.Net.WebClient
+        $WebClient.DownloadFile("http://dl.delivery.mp.microsoft.com/filestreamingservice/files/6d88cf6b-a578-468f-9ef9-2fea92f7e733/MicrosoftEdgeEnterpriseX64.msi","C:\Packages\MicrosoftEdgeBetaEnterpriseX64.msi")
+        sleep 5
+        
+	    Start-Process msiexec.exe -Wait '/I C:\Packages\MicrosoftEdgeBetaEnterpriseX64.msi /qn' -Verbose 
+        sleep 5
+        $WshShell = New-Object -comObject WScript.Shell
+        $Shortcut = $WshShell.CreateShortcut("C:\Users\Public\Desktop\Azure Portal.lnk")
+        $Shortcut.TargetPath = """C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"""
+        $argA = """https://portal.azure.com"""
+        $Shortcut.Arguments = $argA 
+        $Shortcut.Save()
+
+    }
 #Create InstallAzPowerShellModule
 function InstallAzPowerShellModule
 {
@@ -88,6 +114,10 @@ Start-Transcript -Path C:\WindowsAzure\Logs\CloudLabsCustomScriptExtension.txt -
 DisableInternetExplorerESC
 
 EnableIEFileDownload
+
+DisableServerMgrNetworkPopup
+
+InstallEdgeChromium
 
 InstallAzPowerShellModule
 
