@@ -118,8 +118,11 @@ Set-SynapseRole -WorkspaceName $workspaceName -RoleId "6e4bf58a-b8e1-4cc3-bbf9-d
 Set-SynapseRole -WorkspaceName $workspaceName -RoleId "7af0c69a-a548-47d6-aea3-d00e69bd83aa" -PrincipalId $user.id  # SQL Admin
 Set-SynapseRole -WorkspaceName $workspaceName -RoleId "c3a6d2f1-a26f-4810-9b0f-591308d5cbf1" -PrincipalId $user.id  # Apache Spark Admin
 
+<#Set the Azure AD Admin - otherwise it will bail later
+Set-SqlAdministrator -SubscriptionId $subscriptionId -ResourceGroupName $resourceGroupName -WorkspaceName $workspaceName -TenantId $tenantId -UserName $username -Sid $user.id#>
+
 #Set the Azure AD Admin - otherwise it will bail later
-Set-SqlAdministrator -SubscriptionId $subscriptionId -ResourceGroupName $resourceGroupName -WorkspaceName $workspaceName -TenantId $tenantId -UserName $username -Sid $user.id
+Set-SqlAdministrator $username $user.id;
 
 #add the permission to the datalake to workspace
 $id = (Get-AzADServicePrincipal -DisplayName $workspacename).id
@@ -130,10 +133,13 @@ Write-Information "Setting Key Vault Access Policy"
 Set-AzKeyVaultAccessPolicy -ResourceGroupName $resourceGroupName -VaultName $keyVaultName -UserPrincipalName $userName -PermissionsToSecrets set,delete,get,list
 Set-AzKeyVaultAccessPolicy -ResourceGroupName $resourceGroupName -VaultName $keyVaultName -ObjectId $id -PermissionsToSecrets set,delete,get,list
 
-#remove need to ask for the password in script.
+<#remove need to ask for the password in script.
 $sqlPasswordSecret = Get-AzKeyVaultSecret -VaultName $keyVaultName -Name "SqlPassword"
 #$global:sqlPassword = $(Get-AzKeyVaultSecret -VaultName $keyVaultName -Name "SqlPassword").SecretValueText
-$global:sqlPassword = ConvertFrom-SecureString -SecureString $sqlPasswordSecret.SecretValue -AsPlainText #| ConvertFrom-SecureString -AsPlainText
+$global:sqlPassword = ConvertFrom-SecureString -SecureString $sqlPasswordSecret.SecretValue -AsPlainText #| ConvertFrom-SecureString -AsPlainText#>
+
+#remove need to ask for the password in script.
+$global:sqlPassword = $(Get-AzKeyVaultSecret -VaultName $keyVaultName -Name "SqlPassword").SecretValueText
 
 Write-Information "Create SQL-USER-ASA Key Vault Secret in Key Vault $($keyVaultName)"
 $secretValue = ConvertTo-SecureString $sqlPassword -AsPlainText -Force
