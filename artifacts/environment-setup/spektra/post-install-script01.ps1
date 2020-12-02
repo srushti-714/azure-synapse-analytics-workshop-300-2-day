@@ -66,13 +66,18 @@ Function DisableServerMgrNetworkPopup
         $Shortcut.Save()
 
     }
-#Create InstallAzPowerShellModule
-function InstallAzPowerShellModule
-{
-  Install-PackageProvider NuGet -Force
-  Set-PSRepository PSGallery -InstallationPolicy Trusted
-  Install-Module Az -Repository PSGallery -Force -AllowClobber
-}
+Function InstallAzPowerShellModule
+    {
+        <#Install-PackageProvider NuGet -Force
+        Set-PSRepository PSGallery -InstallationPolicy Trusted
+        Install-Module Az -Repository PSGallery -Force -AllowClobber#>
+
+        $WebClient = New-Object System.Net.WebClient
+        $WebClient.DownloadFile("https://github.com/Azure/azure-powershell/releases/download/v5.0.0-October2020/Az-Cmdlets-5.0.0.33612-x64.msi","C:\Packages\Az-Cmdlets-5.0.0.33612-x64.msi")
+        sleep 5
+        Start-Process msiexec.exe -Wait '/I C:\Packages\Az-Cmdlets-5.0.0.33612-x64.msi /qn' -Verbose 
+    
+    }
 
 #Create-LabFilesDirectory
 function CreateLabFilesDirectory
