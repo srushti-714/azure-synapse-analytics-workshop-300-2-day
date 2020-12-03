@@ -195,7 +195,7 @@ Import-Module Az.CosmosDB
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine")
 
 #download the git repo...
-git clone https://github.com/solliancenet/azure-synapse-analytics-workshop-300-2-day.git synapse-ws-L300
+git clone https://github.com/srushti-714/azure-synapse-analytics-workshop-300-2-day.git synapse-ws-L300
 
 $LabFilesDirectory = "C:\LabFiles"
 
