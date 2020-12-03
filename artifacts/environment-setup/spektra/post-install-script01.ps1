@@ -66,14 +66,6 @@ Function DisableServerMgrNetworkPopup
         $Shortcut.Save()
 
     }
-Function InstallAzPowerShellModule
-{
-        $WebClient = New-Object System.Net.WebClient
-        $WebClient.DownloadFile("https://github.com/Azure/azure-powershell/releases/download/v5.0.0-October2020/Az-Cmdlets-5.0.0.33612-x64.msi","C:\Packages\Az-Cmdlets-5.0.0.33612-x64.msi")
-        sleep 5
-        Start-Process msiexec.exe -Wait '/I C:\Packages\Az-Cmdlets-5.0.0.33612-x64.msi /qn' -Verbose 
-    
-}
 
 #Create-LabFilesDirectory
 function CreateLabFilesDirectory
@@ -107,6 +99,12 @@ function CreateCredFile($azureUsername, $azurePassword, $azureTenantID, $azureSu
   Copy-Item "C:\LabFiles\AzureCreds.txt" -Destination "C:\Users\Public\Desktop"
 }
 
+$WebClient = New-Object System.Net.WebClient
+$WebClient.DownloadFile("https://github.com/Azure/azure-powershell/releases/download/v5.0.0-October2020/Az-Cmdlets-5.0.0.33612-x64.msi","C:\Packages\Az-Cmdlets-5.0.0.33612-x64.msi")
+sleep 5
+
+Start-Process msiexec.exe -Wait '/I C:\Packages\Az-Cmdlets-5.0.0.33612-x64.msi /qn' -Verbose
+
 Start-Transcript -Path C:\WindowsAzure\Logs\CloudLabsCustomScriptExtension.txt -Append
 
 [Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls
@@ -119,8 +117,6 @@ EnableIEFileDownload
 DisableServerMgrNetworkPopup
 
 InstallEdgeChromium
-
-InstallAzPowerShellModule
 
 CreateLabFilesDirectory
 
