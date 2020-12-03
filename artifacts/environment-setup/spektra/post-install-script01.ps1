@@ -39,6 +39,14 @@ function EnableIEFileDownload
   Set-ItemProperty -Path $HKLM -Name "1604" -Value 0 -ErrorAction SilentlyContinue -Verbose
   Set-ItemProperty -Path $HKCU -Name "1604" -Value 0 -ErrorAction SilentlyContinue -Verbose
 }
+
+function InstallAzPowerShellModule
+{
+  Install-PackageProvider NuGet -Force
+  Set-PSRepository PSGallery -InstallationPolicy Trusted
+  Install-Module Az -Repository PSGallery -Force -AllowClobber
+}
+
 #Disable PopUp for network configuration
 Function DisableServerMgrNetworkPopup
     {
@@ -66,15 +74,6 @@ Function DisableServerMgrNetworkPopup
         $Shortcut.Save()
 
     }
-
-function InstallAzPowerShellModuleMSI
-{
-  Write-Host "Installing Azure PowerShell (MSI)." -ForegroundColor Green -Verbose
-  #download and install git...		
-  Invoke-WebRequest -Uri https://github.com/Azure/azure-powershell/releases/download/v4.5.0-August2020/Az-Cmdlets-4.5.0.33237-x64.msi -usebasicparsing -OutFile .\AzurePS.msi;
-  Start-Process msiexec.exe -Wait -ArgumentList '/I AzurePS.msi /quiet'; 
-  rm .\AzurePS.msi
-}
 
 #Create-LabFilesDirectory
 function CreateLabFilesDirectory
@@ -125,7 +124,7 @@ EnableIEFileDownload
 
 DisableServerMgrNetworkPopup
 
-InstallAzPowerShellModuleMSI
+InstallAzPowerShellModule
 
 InstallEdgeChromium
 
