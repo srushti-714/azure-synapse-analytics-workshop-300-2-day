@@ -67,6 +67,15 @@ Function DisableServerMgrNetworkPopup
 
     }
 
+function InstallAzPowerShellModuleMSI
+{
+  Write-Host "Installing Azure PowerShell (MSI)." -ForegroundColor Green -Verbose
+  #download and install git...		
+  Invoke-WebRequest -Uri https://github.com/Azure/azure-powershell/releases/download/v4.5.0-August2020/Az-Cmdlets-4.5.0.33237-x64.msi -usebasicparsing -OutFile .\AzurePS.msi;
+  Start-Process msiexec.exe -Wait -ArgumentList '/I AzurePS.msi /quiet'; 
+  rm .\AzurePS.msi
+}
+
 #Create-LabFilesDirectory
 function CreateLabFilesDirectory
 {
@@ -115,6 +124,8 @@ DisableInternetExplorerESC
 EnableIEFileDownload
 
 DisableServerMgrNetworkPopup
+
+InstallAzPowerShellModuleMSI
 
 InstallEdgeChromium
 
