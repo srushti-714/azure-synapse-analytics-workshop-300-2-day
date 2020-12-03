@@ -128,6 +128,8 @@ InstallAzPowerShellModule
 
 InstallEdgeChromium
 
+Uninstall-AzureRm -ea SilentlyContinue
+
 CreateLabFilesDirectory
 
 cd "c:\labfiles";
@@ -161,7 +163,7 @@ Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet';
 rm .\AzureCLI.msi
 
 #install sql server cmdlets
-Install-Module -Name SqlServer
+#Install-Module -Name SqlServer
 
 # Template deployment
 $resourceGroupName = (Get-AzResourceGroup | Where-Object { $_.ResourceGroupName -like "*-L300*" }).ResourceGroupName
@@ -180,7 +182,11 @@ New-AzResourceGroupDeployment -ResourceGroupName $resourceGroupName `
   -TemplateUri "https://raw.githubusercontent.com/solliancenet/azure-synapse-analytics-workshop-400/master/artifacts/environment-setup/automation/00-asa-workspace-core.json" `
   -TemplateParameterFile "c:\LabFiles\parameters.json"
 
-Uninstall-AzureRm
+#install sql server cmdlets
+Write-Host "Installing SQL Module." -ForegroundColor Green -Verbose
+Install-Module -Name SqlServer
+
+#Uninstall-AzureRm
 
 #install cosmosdb
 Install-Module -Name Az.CosmosDB -AllowClobber
